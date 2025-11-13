@@ -25,16 +25,27 @@ class RequestData(BaseModel):
 @app.post("/api/diagnose")
 def diagnose(req: RequestData):
 
+    # 生年月日の変換
     date = datetime.strptime(req.birthdate, "%Y-%m-%d")
 
+    # 月齢 → 陰陽
     age = calculate_moon_phase(date)
     phase = judge_phase_yinyang(age)
 
+    # 三位一体（本命・命業・胎宿）
     hon_id = calculate_honmyo_shuku((date.timetuple().tm_yday * 12.85) % 360)
     mei_id = calculate_meigyo_shuku(hon_id)
     tai_id = calculate_tai_shuku(hon_id)
 
-    result = generate_sanyo_diagnosis(hon_id, mei_id, tai_id, phase)
+    # ★★★ 最重要修正ポイント ★★★
+    # 名前を文章生成エンジンへ渡す
+    result = generate_sanyo_diagnosis(
+        hon_id,
+        mei_id,
+        tai_id,
+        phase,
+        req.name  # ← ← ← ここが修正！
+    )
 
     return {
         "success": True,
