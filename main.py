@@ -1,9 +1,8 @@
-# main.py
 from fastapi import FastAPI
 from pydantic import BaseModel
 from datetime import datetime
 
-from sukuyodo_calculator import (
+from core.sukuyodo_calculator import (
     calculate_honmyo_shuku,
     calculate_meigyo_shuku,
     calculate_tai_shuku,
@@ -11,7 +10,7 @@ from sukuyodo_calculator import (
     judge_phase_yinyang
 )
 
-from diagnosis_generator import generate_sanyo_diagnosis
+from generators.diagnosis_generator import generate_sanyo_diagnosis
 
 app = FastAPI()
 
